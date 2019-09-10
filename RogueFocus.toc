@@ -1,6 +1,6 @@
-## Interface: 11200
+## Interface: 11302
 ## Title: Rogue Focus Classic
-## Version: 1.0.4.11200
+## Version: 1.0.4.11302
 ## Author: Logan, Roadblock
 ## SavedVariables: RogueFocusConfig
 RogueFocus.xml

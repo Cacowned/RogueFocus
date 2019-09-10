@@ -41,12 +41,12 @@
 			<Frame setAllPoints="true">
 				<Scripts>
 					<OnMouseDown>
-						if(arg1 == "LeftButton") then
-							this:GetParent():StartMoving();
+						if(button == "LeftButton") then
+							self:GetParent():StartMoving();
 						end
 					</OnMouseDown>
 					<OnMouseUp>
-						this:GetParent():StopMovingOrSizing();
+						self:GetParent():StopMovingOrSizing();
 					</OnMouseUp>
 				</Scripts>
 			</Frame>
@@ -323,7 +323,7 @@
 						</Anchors>
 						<Scripts>
 							<OnLoad>
-								this:SetFrameLevel(this:GetFrameLevel() - 1)
+								self:SetFrameLevel(self:GetFrameLevel() - 1)
 							</OnLoad>
 						</Scripts>
 						<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
@@ -400,7 +400,7 @@
 						</Layers>
 						<Scripts>
 							<OnLoad>
-								this:SetFrameLevel(this:GetFrameLevel() - 1)
+								self:SetFrameLevel(self:GetFrameLevel() - 1)
 							</OnLoad>
 						</Scripts>
 						<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
@@ -412,7 +412,7 @@
 		
 		<Scripts>
 			<OnLoad>
-				this:SetBackdropBorderColor(0.7, 0.7, 0.7);
+				self:SetBackdropBorderColor(0.7, 0.7, 0.7);
 				RogueFocus:OnLoad();
 			</OnLoad>
 			<OnEvent>

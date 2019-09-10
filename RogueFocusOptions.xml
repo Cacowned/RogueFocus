@@ -88,10 +88,10 @@
 				</Layers>
 				<Scripts>
 					<OnShow>
-						RogueFocusOptions:ScaleSlider_OnShow();
+						RogueFocusOptions:ScaleSlider_OnShow(self);						
 					</OnShow>
 					<OnValueChanged>	
-						RogueFocusOptions:ScaleSlider_OnValueChanged();
+						RogueFocusOptions:ScaleSlider_OnValueChanged(self);
 					</OnValueChanged>
 				</Scripts>
 			</Slider>
@@ -106,11 +106,11 @@
 				</Anchors>
 				<Scripts>
 					<OnShow>
-						RogueFocusOptions:CombatCheckButton_OnShow();
-						getglobal(this:GetName().."Text"):SetText(ROGUEFOCUS_COMBAT);
+						RogueFocusOptions:CombatCheckButton_OnShow(self);
+						getglobal(self:GetName().."Text"):SetText(ROGUEFOCUS_COMBAT);
 					</OnShow>
 					<OnClick>
-						RogueFocusOptions:CombatCheckButton_OnClick();
+						RogueFocusOptions:CombatCheckButton_OnClick(self);
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -125,11 +125,11 @@
 				</Anchors>
 				<Scripts>
 					<OnShow>
-						RogueFocusOptions:StealthCheckButton_OnShow();
-						getglobal(this:GetName().."Text"):SetText(ROGUEFOCUS_STEALTH);
+						RogueFocusOptions:StealthCheckButton_OnShow(self);
+						getglobal(self:GetName().."Text"):SetText(ROGUEFOCUS_STEALTH);
 					</OnShow>
 					<OnClick>
-						RogueFocusOptions:StealthCheckButton_OnClick();
+						RogueFocusOptions:StealthCheckButton_OnClick(self);
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -144,11 +144,11 @@
 				</Anchors>
 				<Scripts>
 					<OnShow>
-						RogueFocusOptions:OtherCheckButton_OnShow();
-						getglobal(this:GetName().."Text"):SetText(ROGUEFOCUS_OTHER);
+						RogueFocusOptions:OtherCheckButton_OnShow(self);
+						getglobal(self:GetName().."Text"):SetText(ROGUEFOCUS_OTHER);
 					</OnShow>
 					<OnClick>
-						RogueFocusOptions:OtherCheckButton_OnClick();
+						RogueFocusOptions:OtherCheckButton_OnClick(self);
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -163,11 +163,11 @@
 				</Anchors>
 				<Scripts>
 					<OnShow>
-						RogueFocusOptions:AudioCheckButton_OnShow();
-						getglobal(this:GetName().."Text"):SetText(ROGUEFOCUS_SOUND);
+						RogueFocusOptions:AudioCheckButton_OnShow(self);
+						getglobal(self:GetName().."Text"):SetText(ROGUEFOCUS_SOUND);
 					</OnShow>
 					<OnClick>
-						RogueFocusOptions:AudioCheckButton_OnClick();
+						RogueFocusOptions:AudioCheckButton_OnClick(self);
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -182,11 +182,11 @@
 				</Anchors>
 				<Scripts>
 					<OnShow>
-						RogueFocusOptions:LockCheckButton_OnShow();
-						getglobal(this:GetName().."Text"):SetText(ROGUEFOCUS_LOCK);
+						RogueFocusOptions:LockCheckButton_OnShow(self);
+						getglobal(self:GetName().."Text"):SetText(ROGUEFOCUS_LOCK);
 					</OnShow>
 					<OnClick>
-						RogueFocusOptions:LockCheckButton_OnClick();
+						RogueFocusOptions:LockCheckButton_OnClick(self);
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -209,12 +209,12 @@
 		
 		<Scripts>
 			<OnMouseDown>
-				if(arg1 == "LeftButton") then
-					this:StartMoving();
+				if(button == "LeftButton") then
+					self:StartMoving();
 				end
 			</OnMouseDown>
 			<OnMouseUp>
-				this:StopMovingOrSizing();
+				self:StopMovingOrSizing();
 			</OnMouseUp>
 		</Scripts>
 	</Frame>

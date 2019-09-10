@@ -47,8 +47,7 @@ function RogueFocus:OnLoad()
 		RogueFocusConfig = RogueFocus_Default
 	end
 	RogueFocus.InCombat = false
-	if (RogueFocus:inStealth()) then RogueFocus.InStealth = true else RogueFocus.InStealth = false end
-
+	RogueFocus.InStealth = RogueFocus:inStealth()
 	function GetChildrenTree(Frame) --- Walk the frame hierarchy recursively adding children.
 		if Frame:GetChildren() then
 			for _,child in pairs({Frame:GetChildren()}) do
@@ -83,7 +82,7 @@ function RogueFocus:OnEvent(eventArg)
 				Frame:SetValue(0)
 			end
 			-- Energy ticks
-			RogueFocus_Energy.Mana = UnitMana("player")
+			RogueFocus_Energy.Mana = UnitPower("player", EnergyWatchBar.powerType)
 			-- Energy ticks text
 			RogueFocusEnergyTickText:SetText(ROGUEFOCUS_ENERGY)
 			-- Create slash events
@@ -100,13 +99,15 @@ function RogueFocus:OnEvent(eventArg)
 	elseif ((eventArg == "PLAYER_AURAS_CHANGED") 
 		or ((eventArg == "UNIT_AURA") and (arg1 == "player"))
 		or (eventArg == "UPDATE_SHAPESHIFT_FORMS")
-		or (eventArg == "UPDATE_BONUS_ACTIONBAR")) then
-		if (RogueFocus:inStealth()) then RogueFocus.InStealth = true else RogueFocus.InStealth = false end
+		or (eventArg == "UPDATE_BONUS_ACTIONBAR")
+		or (eventArg == "UNIT_DISPLAYPOWER")) then
+		RogueFocus.InStealth = RogueFocus:inStealth()
 		RogueFocus:Toggle()
 	
-	elseif (eventArg == "PLAYER_COMBO_POINTS") then
+	elseif (eventArg == "UNIT_POWER_UPDATE") then
 		RogueFocus:UpdateComboBar()
-		
+		RogueFocus:UpdateEnergyBar()
+
 	elseif(((eventArg == "UNIT_ENERGY") or (eventArg == "UNIT_MAXENERGY")) and (arg1 == "player")) then
 		RogueFocus:UpdateEnergyBar()
 		
@@ -130,7 +131,7 @@ end
 
 function RogueFocus:OnUpdate()
 	if(RogueFocus.Registered) then
-		local energy = UnitMana("player")
+		local energy = UnitPower("player", EnergyWatchBar.powerType)
 		local currentTime = GetTime()
 		local sparkPosition = 1
 		
@@ -138,7 +139,7 @@ function RogueFocus:OnUpdate()
 			RogueFocus_Energy.Mana = energy
 			RogueFocus_Energy.Start = currentTime
 			RogueFocus_Energy.End = currentTime + RogueFocus_Energy.Length
-			if (RogueFocusConfig.Audible) then PlaySound("UChatScrollButton") end
+			if (RogueFocusConfig.Audible) then PlaySound(SOUNDKIT.U_CHAT_SCROLL_BUTTON ) end
 		else
 			if(RogueFocus_Energy.Mana ~= energy) then
 				RogueFocus_Energy.Mana = energy
@@ -159,7 +160,7 @@ end
 -- Events Handlers
 ----------------------------------------------------------------------------------------------------
 function RogueFocus:UpdateComboBar()
-	local c = GetComboPoints()
+	local c = UnitPower("player", Enum.PowerType.ComboPoints)
 	local comboBar = {0, 0, 0, 0, 0}
 	local barColor = {[0] = {1, 0, 0}, {1, 0, 0}, {1, 0, 0}, {1, 1, 0}, {1, 1, 0}, {0, 1, 0}}
 	local Frame
@@ -175,7 +176,7 @@ end
 
 -- Author: Masso
 function RogueFocus:UpdateEnergyBar()
-	local value, max = UnitMana("player"), UnitManaMax("player")
+	local value, max =  UnitPower("player", Enum.PowerType.Energy), UnitPowerMax("player", EnergyWatchBar.powerType)
 	local text = value.." / "..max
 	local Frame = _G["RogueFocusEnergyBar"]
 	Frame:SetMinMaxValues(0, max)
@@ -221,53 +222,47 @@ end
 ----------------------------------------------------------------------------------------------------
 function RogueFocus:RegisterEvents()
 	if(RogueFocus.Class ~= "ROGUE" and RogueFocus.Class ~= "DRUID") then
-		this:UnregisterEvent("PLAYER_COMBO_POINTS")
-		this:UnregisterEvent("PLAYER_AURAS_CHANGED")
-		this:UnregisterEvent("PLAYER_REGEN_DISABLED")
-		this:UnregisterEvent("PLAYER_REGEN_ENABLED")
-		this:UnregisterEvent("PLAYER_ENTERING_WORLD")
-		this:UnregisterEvent("PLAYER_DEAD")
-		this:UnregisterEvent("UNIT_ENERGY")
-		this:UnregisterEvent("UNIT_MAXENERGY")
-		this:UnregisterEvent("UNIT_AURA")
-		this:UnregisterEvent("UPDATE_SHAPESHIFT_FORMS")
-		this:UnregisterEvent("UPDATE_BONUS_ACTIONBAR")
-		this:UnregisterEvent("VARIABLES_LOADED")
+		-- self:UnregisterEvent("PLAYER_COMBO_POINTS")
+		-- self:UnregisterEvent("PLAYER_AURAS_CHANGED")
+		-- self:UnregisterEvent("PLAYER_REGEN_DISABLED")
+		-- self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+		-- self:UnregisterEvent("PLAYER_DEAD")
+		self:UnregisterEvent("UNIT_DISPLAYPOWER")
+		-- self:UnregisterEvent("UNIT_MAXENERGY")
+		-- self:UnregisterEvent("UNIT_AURA")
+		-- self:UnregisterEvent("UPDATE_SHAPESHIFT_FORMS")
+		-- self:UnregisterEvent("UPDATE_BONUS_ACTIONBAR")
+		self:UnregisterEvent("UNIT_POWER_UPDATE")
+		self:UnregisterEvent("VARIABLES_LOADED")
 		return false
 	else
-		this:RegisterForDrag("LeftButton")
-		this:RegisterEvent("PLAYER_COMBO_POINTS")
-		this:RegisterEvent("PLAYER_AURAS_CHANGED")
-		this:RegisterEvent("PLAYER_REGEN_DISABLED")
-		this:RegisterEvent("PLAYER_REGEN_ENABLED")
-		this:RegisterEvent("PLAYER_ENTERING_WORLD")
-		this:RegisterEvent("PLAYER_DEAD")
-		this:RegisterEvent("UNIT_ENERGY")
-		this:RegisterEvent("UNIT_MAXENERGY")
-		this:RegisterEvent("UNIT_AURA")
-		this:RegisterEvent("UPDATE_SHAPESHIFT_FORMS")
-		this:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
-		this:RegisterEvent("VARIABLES_LOADED")
+		-- self:RegisterForDrag("LeftButton")
+		-- RogueFocusFrame:RegisterEvent("PLAYER_COMBO_POINTS")
+		-- RogueFocusFrame:RegisterEvent("PLAYER_AURAS_CHANGED")
+		-- RogueFocusFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
+		-- RogueFocusFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
+		RogueFocusFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+		-- RogueFocusFrame:RegisterEvent("PLAYER_DEAD")
+		RogueFocusFrame:RegisterEvent("UNIT_DISPLAYPOWER")
+		-- RogueFocusFrame:RegisterEvent("UNIT_MAXENERGY")
+		-- RogueFocusFrame:RegisterEvent("UNIT_AURA")
+		-- RogueFocusFrame:RegisterEvent("UPDATE_SHAPESHIFT_FORMS")
+		-- RogueFocusFrame:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
+		RogueFocusFrame:RegisterEvent("UNIT_POWER_UPDATE")
+		RogueFocusFrame:RegisterEvent("VARIABLES_LOADED")
 		return true
 	end
 end
 
 function RogueFocus:IsSupported()
- 	if ( UnitPowerType("player") == 3 ) then
-   	return true
+	 if ( UnitPowerType("player") == 3 ) then
+   		return true
 	else
 		return false
 	end
 end
 
 function RogueFocus:inStealth()
-	local i = 0
-	while GetPlayerBuffTexture(i) ~= nil do
-		if RogueFocusStealth[(GetPlayerBuffTexture(i))] == true then
-			return true
-		else
-			i = i + 1
-		end
-	end
-	return false
+	return IsStealthed()
 end

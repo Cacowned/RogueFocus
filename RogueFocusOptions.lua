@@ -19,54 +19,54 @@ end
 ----------------------------------------------------------------------------------------------------
 -- Scaling
 ----------------------------------------------------------------------------------------------------
-local function RogueFocusOptionsScaleSlider_Init()
+local function RogueFocusOptionsScaleSlider_Init(self)
 	if(not RogueFocusOptions.scaleSliderLoaded) then
 		local Text, Low, Full;
-		Text = _G[this:GetName().."Text"];
-		Low = _G[this:GetName().."Low"];
-		High = _G[this:GetName().."High"];
+		Text = _G[self:GetName().."Text"];
+		Low = _G[self:GetName().."Low"];
+		High = _G[self:GetName().."High"];
 		
 		Text:SetText(ROGUEFOCUS_SCALE);
 		Low:SetText(ROGUEFOCUS_LOW);
 		High:SetText(ROGUEFOCUS_HIGH);
 		
-		this:SetMinMaxValues(1.0, 2.0);
-		this:SetValueStep(.1);
+		self:SetMinMaxValues(1.0, 2.0);
+		self:SetValueStep(.1);
 		
 		RogueFocusOptions.scaleSliderLoaded = true;
 	end
 	local value = format("%.1f", RogueFocusConfig.Scale);
-	_G[this:GetName().."Value"]:SetText(value);
+	_G[self:GetName().."Value"]:SetText(value);
 	RogueFocusFrame:SetScale(RogueFocusConfig.Scale);
 end
 
-function RogueFocusOptions:ScaleSlider_OnShow()
-	RogueFocusOptionsScaleSlider_Init();
-	this:SetValue(RogueFocusConfig.Scale);
+function RogueFocusOptions:ScaleSlider_OnShow(self)
+	RogueFocusOptionsScaleSlider_Init(self);
+	self:SetValue(RogueFocusConfig.Scale);
 end
 
-function RogueFocusOptions:ScaleSlider_OnValueChanged()
-	RogueFocusConfig.Scale = this:GetValue();
-	RogueFocusOptionsScaleSlider_Init();
+function RogueFocusOptions:ScaleSlider_OnValueChanged(self)
+	RogueFocusConfig.Scale = self:GetValue();
+	RogueFocusOptionsScaleSlider_Init(self);
 end
 
 ----------------------------------------------------------------------------------------------------
 -- Combat
 ----------------------------------------------------------------------------------------------------
-function RogueFocusOptions:CombatCheckButton_OnShow()
-	this:SetChecked(RogueFocusConfig.InCombat);
+function RogueFocusOptions:CombatCheckButton_OnShow(self)
+	self:SetChecked(RogueFocusConfig.InCombat);
 end
 
-function RogueFocusOptions:StealthCheckButton_OnShow()
-	this:SetChecked(RogueFocusConfig.InStealth);
+function RogueFocusOptions:StealthCheckButton_OnShow(self)
+	self:SetChecked(RogueFocusConfig.InStealth);
 end
 
-function RogueFocusOptions:OtherCheckButton_OnShow()
-	this:SetChecked(RogueFocusConfig.InOther);
+function RogueFocusOptions:OtherCheckButton_OnShow(self)
+	self:SetChecked(RogueFocusConfig.InOther);
 end
 
-function RogueFocusOptions:CombatCheckButton_OnClick()
-	if(1 == this:GetChecked()) then
+function RogueFocusOptions:CombatCheckButton_OnClick(self)
+	if(self:GetChecked()) then
 		RogueFocusConfig.InCombat = true;
 	else
 		RogueFocusConfig.InCombat = false;
@@ -74,8 +74,8 @@ function RogueFocusOptions:CombatCheckButton_OnClick()
 	RogueFocus:Toggle();
 end
 
-function RogueFocusOptions:StealthCheckButton_OnClick()
-	if(1 == this:GetChecked()) then
+function RogueFocusOptions:StealthCheckButton_OnClick(self)
+	if(self:GetChecked()) then
 		RogueFocusConfig.InStealth = true;
 	else
 		RogueFocusConfig.InStealth = false;
@@ -83,8 +83,8 @@ function RogueFocusOptions:StealthCheckButton_OnClick()
 	RogueFocus:Toggle();
 end
 
-function RogueFocusOptions:OtherCheckButton_OnClick()
-	if(1 == this:GetChecked()) then
+function RogueFocusOptions:OtherCheckButton_OnClick(self)
+	if(self:GetChecked()) then
 		RogueFocusConfig.InOther = true;
 	else
 		RogueFocusConfig.InOther = false;
@@ -96,12 +96,12 @@ end
 -- Audio & Locking
 ----------------------------------------------------------------------------------------------------
 
-function RogueFocusOptions:AudioCheckButton_OnShow()
-	this:SetChecked(RogueFocusConfig.Audible);
+function RogueFocusOptions:AudioCheckButton_OnShow(self)
+	self:SetChecked(RogueFocusConfig.Audible);
 end
 
-function RogueFocusOptions:AudioCheckButton_OnClick()
-	if(1 == this:GetChecked()) then
+function RogueFocusOptions:AudioCheckButton_OnClick(self)
+	if(self:GetChecked()) then
 		RogueFocusConfig.Audible = true;
 	else
 		RogueFocusConfig.Audible = false;
@@ -109,12 +109,12 @@ function RogueFocusOptions:AudioCheckButton_OnClick()
 	RogueFocus:Toggle();
 end
 
-function RogueFocusOptions:LockCheckButton_OnShow()
-	this:SetChecked(RogueFocusConfig.Locked);
+function RogueFocusOptions:LockCheckButton_OnShow(self)
+	self:SetChecked(RogueFocusConfig.Locked);
 end
 
-function RogueFocusOptions:LockCheckButton_OnClick()
-	if(1 == this:GetChecked()) then
+function RogueFocusOptions:LockCheckButton_OnClick(self)
+	if(self:GetChecked()) then
 		RogueFocusConfig.Locked = true;
 	else
 		RogueFocusConfig.Locked = false;
