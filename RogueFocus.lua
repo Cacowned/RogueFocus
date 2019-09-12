@@ -82,7 +82,7 @@ function RogueFocus:OnEvent(eventArg)
 				Frame:SetValue(0)
 			end
 			-- Energy ticks
-			RogueFocus_Energy.Mana = UnitPower("player", EnergyWatchBar.powerType)
+			RogueFocus_Energy.Mana = UnitPower("player", Enum.PowerType.Energy)
 			-- Energy ticks text
 			RogueFocusEnergyTickText:SetText(ROGUEFOCUS_ENERGY)
 			-- Create slash events
@@ -131,7 +131,7 @@ end
 
 function RogueFocus:OnUpdate()
 	if(RogueFocus.Registered) then
-		local energy = UnitPower("player", EnergyWatchBar.powerType)
+		local energy = UnitPower("player", Enum.PowerType.Energy)
 		local currentTime = GetTime()
 		local sparkPosition = 1
 		
@@ -176,7 +176,7 @@ end
 
 -- Author: Masso
 function RogueFocus:UpdateEnergyBar()
-	local value, max =  UnitPower("player", Enum.PowerType.Energy), UnitPowerMax("player", EnergyWatchBar.powerType)
+	local value, max =  UnitPower("player", Enum.PowerType.Energy), UnitPowerMax("player", Enum.PowerType.Energy)
 	local text = value.." / "..max
 	local Frame = _G["RogueFocusEnergyBar"]
 	Frame:SetMinMaxValues(0, max)
